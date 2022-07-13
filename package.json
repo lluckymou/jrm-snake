@@ -1,0 +1,24 @@
+{
+  "name": "jrm-snake",
+  "version": "1.0.0",
+  "description": "Jogo da \"Cobrinha\" para a disciplina JRM",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lluckymou/jrm-snake.git"
+  },
+  "author": "Lucas Moura & Marcos Martins",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lluckymou/jrm-snake/issues"
+  },
+  "homepage": "https://github.com/lluckymou/jrm-snake#readme",
+  "dependencies": {
+    "express": "^4.18.1",
+    "socket.io": "^4.5.1",
+    "uuid": "^8.3.2"
+  }
+}

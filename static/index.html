@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- Meta -->
+        <title>Jogo da Cobrinha</title>
+        <meta charset="utf-8">
+
+        <!-- Socket.io -->
+        <script src="/socket.io/socket.io.js"></script>
+
+        <!-- Bootstrap -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+        <!-- Other stylesheets -->
+        <link rel="stylesheet" href="game.css">
+    </head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+        <div class="container-fluid">
+            <span class="navbar-brand">Snake JRM</span>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <input id="gameCodeDisplay" class="form-control me-4 ms-2" placeholder="Desconectado" aria-label="Entrar" readonly>
+                <div class="d-flex">
+                    <input id="gameCodeInput" class="form-control me-2" placeholder="Código da Partida" aria-label="Entrar">
+                    <button id="joinGameButton" class="btn btn-outline-success">Entrar</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div id="lobby" class="container">
+        <div class="mb-4 text-center">
+            <h1 class="mb-2">Snake</h1>
+            <p class="mb-4">Digite o código da sala na barra superior ou escolha uma sala abaixo para entrar na partida.</p>
+            <hr>
+            <h3 class="mb-0 mt-1"><b>Seleção de salas</b></h3>
+            <div class="mt-2 mb-3">
+                <div class="w-100 d-flex justify-content-between">
+                    <div>
+                        <button type="submit" class="btn btn-success" id="newGameButton">
+                            ➕ Criar Sala
+                        </button>
+                        <button type="submit" class="btn btn-secondary" onclick="$('#servers tr.bg-secondary').toggleClass('d-none')">
+                            👁️ Ver/Esconder salas cheias
+                        </button>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="newGameButton">
+                        🔃 Recarregar Lista
+                    </button>
+                </div>
+                <table id="servers" class="table align-middle">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Players</th>
+                            <th scope="col">Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="bg-success text-white">
+                            <td scope="row">484cc20f-11dc-4730-af6e-e480998fa1bd</td>
+                            <td>NomeDoJogador</td>
+                            <td><button onclick="alert('id-sala')" class="btn btn-primary">Entrar</button></td>
+                        </tr>
+                        <tr class="bg-secondary text-white">
+                            <td scope="row">484cc20f-11dc-4730-af6e-e480998fa1bd</td>
+                            <td>NomeDoJogador, NomeDoJogador</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <hr>
+        </div>
+        <div class="mb-4 text-center">
+            <i>
+                Por: Lucas Moura e Marcos Martins.<br>
+                Bibliotecas utilizadas: jQuery, Bootstrap e Socket.io
+            </i>
+        </div>
+    </div>
+
+    <div id="gameScreen" class="container">
+        <div class="mt-4 text-center">
+            <p><b>Para compartilhar sua sala, copie:</b> <span id="gameCodeCopyPaste"></span></p>
+            <canvas class="margin-auto" id="canvas"></canvas>
+        </div>
+    </div>
+
+    <!-- Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" 
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" 
+    crossorigin="anonymous"></script>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+        crossorigin="anonymous"></script>
+
+    <!-- Other Scripts -->
+    <script src="game.js"></script>
+</body>
+</html>
