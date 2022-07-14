@@ -31,47 +31,71 @@
         </div>
     </nav>
 
-    <div id="lobby" class="container">
+    <div id="register">
         <div class="mb-4 text-center">
             <h1 class="mb-2">Snake</h1>
             <p class="mb-4">Digite o código da sala na barra superior ou escolha uma sala abaixo para entrar na partida.</p>
             <hr>
-            <h3 class="mb-0 mt-1"><b>Seleção de salas</b></h3>
+            <h3 class="mb-1 mt-2"> <b>Login / Registro:</b> </h3>
+            <div class="w-50 m-auto">
+                <input id="username" placeholder="Nome de usuário" class="form-control my-2">
+                <input id="password" type="password" placeholder="Senha" class="form-control my-2">
+            </div>
+            <button id="login-register" onclick="loginRegister()" class="btn btn-success">Entrar / Registrar</button>
+            <hr>
+        </div>
+        <div class="mb-4 text-center">
+            <i>
+                Por: Lucas Moura e Marcos Martins.<br>
+                Bibliotecas utilizadas: jQuery, Bootstrap e Socket.io
+            </i>
+        </div>
+            
+    </div>
+
+    <div id="lobby" class="container d-none">
+        <div class="mb-4 text-center">
+            <h1 class="mb-2">Snake</h1>
+            <p class="mb-4">Digite o código da sala na barra superior ou escolha uma sala abaixo para entrar na partida.</p>
+            <hr>
+            <h3 class="mb-1 mt-2"><b>Seleção de salas</b></h3>
             <div class="mt-2 mb-3">
-                <div class="w-100 d-flex justify-content-between">
-                    <div>
-                        <button type="submit" class="btn btn-success" id="newGameButton">
-                            ➕ Criar Sala
-                        </button>
-                        <button type="submit" class="btn btn-secondary" onclick="$('#servers tr.bg-secondary').toggleClass('d-none')">
-                            👁️ Ver/Esconder salas cheias
-                        </button>
+                <div class="row">
+                    <div class="col col-md-8">
+                        <div class="w-100 d-flex justify-content-between">
+                            <div>
+                                <button type="submit" class="btn btn-success" id="newGameButton">
+                                    ➕ Criar Sala
+                                </button>
+                                <button type="submit" class="btn btn-secondary" onclick="$('#servers tr.bg-secondary').toggleClass('d-none')">
+                                    👁️ Ver/Esconder salas cheias
+                                </button>
+                            </div>
+                            <button onclick="refreshList()" class="btn btn-primary" id="newGameButton">
+                                🔃 Recarregar Lista
+                            </button>
+                        </div>
+                        <table id="servers" class="table align-middle">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Ação</th>
+                                </tr>
+                            </thead>
+                            <tbody id="serverlist">
+
+                            </tbody>
+                        </table>
                     </div>
-                    <button type="submit" class="btn btn-primary" id="newGameButton">
-                        🔃 Recarregar Lista
-                    </button>
+                    <div class="col col-md-4">
+                        <div class="px-4" id="chatbox" style="height: 240px; overflow-y: auto;">
+                            <p class="text-center w-100 text-secondary"> <i>Início do chat do lobby</i> </p>
+                        </div>
+                        <div class="d-flex">
+                            <input id="message" placeholder="Mensagem..." class="form-control me-3"> <button class="btn btn-secondary" onclick="sendMessage()">Enviar</button>
+                        </div>
+                    </div>
                 </div>
-                <table id="servers" class="table align-middle">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Players</th>
-                            <th scope="col">Ação</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="bg-success text-white">
-                            <td scope="row">484cc20f-11dc-4730-af6e-e480998fa1bd</td>
-                            <td>NomeDoJogador</td>
-                            <td><button onclick="alert('id-sala')" class="btn btn-primary">Entrar</button></td>
-                        </tr>
-                        <tr class="bg-secondary text-white">
-                            <td scope="row">484cc20f-11dc-4730-af6e-e480998fa1bd</td>
-                            <td>NomeDoJogador, NomeDoJogador</td>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                </table>
             </div>
             <hr>
         </div>
@@ -83,7 +107,7 @@
         </div>
     </div>
 
-    <div id="gameScreen" class="container">
+    <div id="gameScreen" class="container d-none">
         <div class="mt-4 text-center">
             <p><b>Para compartilhar sua sala, copie:</b> <span id="gameCodeCopyPaste"></span></p>
             <canvas class="margin-auto" id="canvas"></canvas>

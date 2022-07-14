@@ -23,14 +23,61 @@ server.listen(port, () => {
 
 const state = {};
 const clientRooms = {};
+const credentials = [];
 
 io.on('connection', client => {
 
     console.log("Jogador entrou");
 
+    client.on('login-register', handleLogin);
     client.on('keydown', handleKeydown);
     client.on('newGame', handleNewGame);
     client.on('joinGame', handleJoinGame);
+    client.on('message', handleMessage);
+    client.on('refresh', handleRefreshList);
+
+    function handleLogin(data) {
+        // Procura usuário para tentar autenticar
+        for (let i = 0; i < credentials.length; i++) {
+            const element = credentials[i];
+            if(element.username == data.username) {
+                if(element.password == data.password) {
+                    client.emit('authentication', { username: data.username, newUser: false });
+                    handleRefreshList();
+                    return;
+                } else {
+                    client.emit('authentication-fail', 'Este usuário já existe e a senha não é essa.');
+                    return;
+                }
+            }
+        }
+        
+        // Cria usuário
+        credentials.push(data);
+        client.emit('authentication', { username: data.username, newUser: true });
+        handleRefreshList();
+    }
+
+    function handleMessage(data) {
+        io.emit("message", data);
+    }
+
+    function handleRefreshList() {
+        const arr = Array.from(io.sockets.adapter.rooms);
+        const filtered = arr.filter(room => !room[1].has(room[0]));
+        const res = filtered.map(i => i[0]);
+
+        const serverarray = [];
+
+        for (let i = 0; i < res.length; i++) {
+            const element = res[i];
+            var isFull = (io.sockets.adapter.rooms.get(element).size > 1);
+
+            serverarray.push( { room: element, isFull: isFull } );
+        }
+
+        client.emit('refresh', serverarray);
+    }
 
     function handleJoinGame(roomName) {
         console.log(`Alguém tentando entrar em ${roomName}`);

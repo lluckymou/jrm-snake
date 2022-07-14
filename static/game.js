@@ -4,9 +4,14 @@ const SNAKE_2_COLOUR = '#c2aa22';
 const BG_COLOUR = '#E7FAE5';
 
 const socket = io();
+var user = undefined;
 
 socket.on('init', handleInit);
 socket.on('quit', handleQuit);
+socket.on('message', handleMessage);
+socket.on('authentication', handleAuthentication);
+socket.on('authentication-fail', handleAuthenticationFail);
+socket.on('refresh', handleRefreshList);
 socket.on('gameState', handleGameState);
 socket.on('gameOver', handleGameOver);
 socket.on('gameCode', handleGameCode);
@@ -20,16 +25,83 @@ const gameCodeInput = document.getElementById('gameCodeInput');
 newGameBtn.addEventListener('click', newGame);
 joinGameBtn.addEventListener('click', joinGame);
 
+function loginRegister() {
+    var username = $('#username').val();
+    var password = $('#password').val();
+
+    if(!username) {
+        alert('Erro no preenchimento do usuário, verifique o texto digitado e tente novamente.');
+        return;
+    } else if(username.length < 3) {
+        alert('O usuário precisa ter ao menos 3 caracteres');
+        return;
+    }
+
+    if(!password) { 
+        alert('Erro no preenchimento da senha, verifique o texto digitado e tente novamente.');
+        return;
+    } else if(password.length < 8) {
+        alert('A senha precisa ter ao menos 8 caracteres');
+        return;
+    }
+
+    socket.emit('login-register', { username: username, password: password });
+}
+
+function sendMessage() {
+    if(!user) {
+        alert("Erro ao mandar mensagem a partir deste usuário, recarregue a página e tente novamente");
+        return;
+    } 
+
+    var message = $('#message').val();
+    $('#message').val('');
+
+    socket.emit('message', { sender: user, message: message });
+}
+
+function handleMessage(data) {
+    $('#chatbox').prepend(`<p class="${(data.sender == user)? 'text-end text-primary' : 'text-start'} w-100"> <b><span>${data.sender}</span>:</b> ${data.message} </p>`);
+}
+
+function refreshList() {
+    socket.emit('refresh');
+}
+
+function handleRefreshList(data) {
+    $('#serverlist').html('');
+
+    for (let i = 0; i < data.length; i++) {
+        const element = data[i];
+        $('#serverlist').append(`<tr class="${element.isFull? 'bg-secondary' : 'bg-success'} text-white"> <td scope="row">${element.room}</td> <td><button onclick="join('${element.room}')" class="btn btn-primary ${element.isFull? 'd-none' : 'd-block'}">Entrar</button></td> </tr>`);
+    }
+}
+
+function handleAuthentication(data) {
+    user = data.username;
+    if(data.newUser) alert(`Novo usuário ${user} criado!`);
+
+    $('#register').addClass("d-none");
+    $('#lobby').removeClass("d-none");
+}
+
+function handleAuthenticationFail(message) {
+    alert(message);
+}
 
 function newGame() {
     socket.emit('newGame');
     init();
 }
 
+function join(game) {
+    socket.emit('joinGame', game);
+    init();
+}
+
 function joinGame() {
     const code = gameCodeInput.value;
-    socket.emit('joinGame', code);
-    init();
+    join(code);
 }
 
 let canvas, ctx;
@@ -38,7 +110,7 @@ let gameActive = false;
 
 function init() {
     $('#lobby').addClass("d-none");
-    $('#gameScreen').addClass("d-block");
+    $('#gameScreen').removeClass("d-none");
 
     canvas = document.getElementById('canvas');
     ctx = canvas.getContext('2d');
@@ -115,7 +187,7 @@ function handleGameCode(gameCode) {
 }
 
 function handleUnknownCode() {
-    alert('Sala não encontrada ou já encerrada, recarregue a lista para ver as salas abertas atualmente.');
+    alert('Sala não encontrada ou já encerrada/cheia, recarregue a lista para ver as salas abertas atualmente.');
     location.reload();
 }
 
