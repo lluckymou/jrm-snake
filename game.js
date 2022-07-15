@@ -132,18 +132,55 @@ function randomFood(state) {
     state.food = food;
 }
 
-function getUpdatedVelocity(keyCode) {
+function randomPoop(state) {
+    poop = {
+        x: Math.floor(Math.random() * GRID_SIZE),
+        y: Math.floor(Math.random() * GRID_SIZE),
+    }
+
+    for (let cell of state.players[0].snake) {
+        if (cell.x === poop.x && cell.y === poop.y) {
+            return randomPoop(state);
+        }
+    }
+
+    for (let cell of state.players[1].snake) {
+        if (cell.x === poop.x && cell.y === poop.y) {
+            return randomPoop(state);
+        }
+    }
+
+    state.poop = poop;
+}
+
+function getUpdatedVelocity(keyCode, velCurrent) {
     switch (keyCode) {
         case 37: { // left
+            if (velCurrent.x == 1)
+            {
+                return { x: 1, y: 0 };
+            }
             return { x: -1, y: 0 };
         }
         case 38: { // down
+            if (velCurrent.y == 1)
+            {
+                return { x: 0, y: 1 };
+            }
             return { x: 0, y: -1 };
         }
         case 39: { // right
+            if (velCurrent.x == -1)
+            {
+                return { x: -1, y: 0 };
+            }
             return { x: 1, y: 0 };
         }
         case 40: { // up
+            if (velCurrent.y == -1)
+            {
+                return { x: 0, y: -1 };
+            }
             return { x: 0, y: 1 };
         }
     }
