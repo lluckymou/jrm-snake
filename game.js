@@ -11,6 +11,7 @@ module.exports = {
 function initGame() {
     const state = createGameState()
     randomFood(state);
+    randomPoop(state);
     return state;
 }
 
@@ -46,6 +47,7 @@ function createGameState() {
             ],
         }],
         food: {},
+        poop: {},
         gridsize: GRID_SIZE,
     };
 }
@@ -84,6 +86,20 @@ function gameLoop(state) {
         playerTwo.pos.x += playerTwo.vel.x;
         playerTwo.pos.y += playerTwo.vel.y;
         randomFood(state);
+    }
+
+    if (state.poop.x === playerOne.pos.x && state.poop.y === playerOne.pos.y) {
+        playerOne.snake.pop({ ...playerOne.pos });
+        playerOne.pos.x -= playerOne.vel.x;
+        playerOne.pos.y -= playerOne.vel.y;
+        randomPoop(state);
+    }
+
+    if (state.poop.x === playerTwo.pos.x && state.poop.y === playerTwo.pos.y) {
+        playerTwo.snake.pop({ ...playerTwo.pos });
+        playerTwo.pos.x -= playerTwo.vel.x;
+        playerTwo.pos.y -= playerTwo.vel.y;
+        randomPoop(state);
     }
 
     if (playerOne.vel.x || playerOne.vel.y) {

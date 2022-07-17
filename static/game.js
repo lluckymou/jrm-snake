@@ -1,4 +1,5 @@
-const FOOD_COLOUR = '#670000';
+const FOOD_COLOUR = '#800000';
+const POOP_COLOUR = '#000000';
 const SNAKE_COLOUR = '#8fc859';
 const SNAKE_2_COLOUR = '#c2aa22';
 const BG_COLOUR = '#E7FAE5';
@@ -27,6 +28,7 @@ joinGameBtn.addEventListener('click', joinGame);
 
 function loginRegister() {
     var username = $('#username').val();
+    var email = $('#email').val();
     var password = $('#password').val();
 
     if(!username) {
@@ -34,6 +36,14 @@ function loginRegister() {
         return;
     } else if(username.length < 3) {
         alert('O usuário precisa ter ao menos 3 caracteres');
+        return;
+    }
+
+    if(!email) {
+        alert('Erro no preenchimento de email, verifique o texto digitado e tente novamente.');
+        return;
+    } else if(!email.includes("@")) {
+        alert('O email digitado precisa ser um email valido');
         return;
     }
 
@@ -45,7 +55,7 @@ function loginRegister() {
         return;
     }
 
-    socket.emit('login-register', { username: username, password: password });
+    socket.emit('login-register', { username: username, email: email, password: password });
 }
 
 function sendMessage() {
@@ -133,11 +143,14 @@ function paintGame(state) {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     const food = state.food;
+    const poop = state.poop;
     const gridsize = state.gridsize;
     const size = canvas.width / gridsize;
 
     ctx.fillStyle = FOOD_COLOUR;
     ctx.fillRect(food.x * size, food.y * size, size, size);
+    ctx.fillStyle = POOP_COLOUR;
+    ctx.fillRect(poop.x * size, poop.y * size, size, size);
 
     paintPlayer(state.players[0], size, SNAKE_COLOUR);
     paintPlayer(state.players[1], size, SNAKE_2_COLOUR);
