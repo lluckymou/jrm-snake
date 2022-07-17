@@ -62,7 +62,12 @@ function sendMessage() {
     if(!user) {
         alert("Erro ao mandar mensagem a partir deste usuário, recarregue a página e tente novamente");
         return;
-    } 
+    }
+
+    if(!message) {
+        alert("Escreva algo primeiro");
+        return;
+    }
 
     var message = $('#message').val();
     $('#message').val('');

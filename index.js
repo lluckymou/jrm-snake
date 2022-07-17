@@ -40,7 +40,7 @@ io.on('connection', client => {
         // Procura usuário para tentar autenticar
         for (let i = 0; i < credentials.length; i++) {
             const element = credentials[i];
-            if(element.username == data.username) {
+            if(element.username == data.username && element.email == data.email) {
                 if(element.password == data.password) {
                     client.emit('authentication', { username: data.username, newUser: false });
                     handleRefreshList();
