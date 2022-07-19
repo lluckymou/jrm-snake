@@ -1,5 +1,6 @@
-const FOOD_COLOUR = '#800000';
-const POOP_COLOUR = '#000000';
+const FOOD_COLOUR = '#FFB6C1';
+const POOP_COLOUR = '#964B00';
+const ROOK_COLOUR = '#000000';
 const SNAKE_COLOUR = '#8fc859';
 const SNAKE_2_COLOUR = '#c2aa22';
 const BG_COLOUR = '#E7FAE5';
@@ -152,6 +153,8 @@ function paintGame(state) {
     const gridsize = state.gridsize;
     const size = canvas.width / gridsize;
 
+    paintCluster(state.rockCluster, size, ROOK_COLOUR);
+
     ctx.fillStyle = FOOD_COLOUR;
     ctx.fillRect(food.x * size, food.y * size, size, size);
     ctx.fillStyle = POOP_COLOUR;
@@ -159,6 +162,13 @@ function paintGame(state) {
 
     paintPlayer(state.players[0], size, SNAKE_COLOUR);
     paintPlayer(state.players[1], size, SNAKE_2_COLOUR);
+}
+
+function paintCluster(rockCluster, size, colour) {
+    ctx.fillStyle = colour;
+    for (let cell of rockCluster) {
+        ctx.fillRect(cell.x * size, cell.y * size, size, size);
+    }
 }
 
 function paintPlayer(playerState, size, colour) {
@@ -195,8 +205,6 @@ function handleGameOver(data) {
     } else {
         alert('Você perdeu :(\n\nJogo encerrado. Recarregue a página para jogar novamente.');
     }
-
-
 }
 
 function handleGameCode(gameCode) {
